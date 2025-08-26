@@ -6,7 +6,7 @@
 #SBATCH --job-name=job
 #SBATCH --error=/vast/bl3021/job_error.log
 #SBATCH --output=/vast/bl3021/job_output.log
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:0
 #SBATCH --cpus-per-task=4
 
 curl -fsSL https://raw.githubusercontent.com/lyob/singit/da4afe79894363e34af8bf2fcdc51b14400642a6/entrypoint.sh -o $SLURM_TMPDIR/ssh_server.sh
