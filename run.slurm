@@ -9,9 +9,16 @@
 #SBATCH --gres=gpu:0
 #SBATCH --cpus-per-task=4
 
-curl -fsSL https://raw.githubusercontent.com/lyob/singit/da4afe79894363e34af8bf2fcdc51b14400642a6/entrypoint.sh -o $SLURM_TMPDIR/ssh_server.sh
+ENTRYPOINT_FILE=$(mktemp) 
+curl -fsSL https://raw.githubusercontent.com/lyob/singit/da4afe79894363e34af8bf2fcdc51b14400642a6/entrypoint.sh -o $ENTRYPOINT_FILE
+
+# Open entrypoint on FD 3 and unlink it
+exec 3<"$ENTRYPOINT_FILE"
+rm "$ENTRYPOINT_FILE"
 
 singularity exec --nv --containall --no-home --cleanenv \
 --overlay /scratch/bl3021/disk.ext3:rw \
 --bind /home/bl3021/.ssh,$SLURM_TMPDIR:/tmp \
-docker://lyob/devenv:latest bash $SLURM_TMPDIR/ssh_server.sh
+docker://lyob/devenv:latest bash <&3 
+
+exec 3<&-
