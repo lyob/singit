@@ -19,6 +19,6 @@ rm "$ENTRYPOINT_FILE"
 singularity exec --nv --containall --no-home --cleanenv \
 --overlay /scratch/bl3021/disk.ext3:rw \
 --bind /home/bl3021/.ssh,$SLURM_TMPDIR:/tmp \
-docker://lyob/devenv:latest bash <&3 
+/scratch/bl3021/test-singbuild.sif bash <&3
 
 exec 3<&-
